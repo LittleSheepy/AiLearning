@@ -97,7 +97,8 @@ def classify0(inX, dataSet, labels, k):
     classCount = {}
     for i in range(k):
         # 找到该样本的类型
-        voteIlabel = labels[sortedDistIndicies[i]]
+        dis = sortedDistIndicies[i]
+        voteIlabel = labels[dis]
         # 在字典中将该类型加一
         # 字典的get方法
         # 如：list.get(k,d) 其中 get相当于一条if...else...语句,参数k在字典中，字典将返回list[k];如果参数k不在字典中则返回参数d,如果K在字典中则返回k对应的value值
@@ -291,7 +292,8 @@ def handwritingClassTest():
     """
     # 1. 导入数据
     hwLabels = []
-    trainingFileList = os.listdir("../../../input/2.KNN/trainingDigits") # load the training set
+    errorName = []
+    trainingFileList = os.listdir("../../../../input/2.KNN/trainingDigits") # load the training set
     m = len(trainingFileList)
     trainingMat = zeros((m, 1024))
     # hwLabels存储0～9对应的index位置， trainingMat存放的每个位置对应的图片向量
@@ -313,13 +315,21 @@ def handwritingClassTest():
         classNumStr = int(fileStr.split('_')[0])
         vectorUnderTest = img2vector('../../../input/2.KNN/testDigits/%s' % fileNameStr)
         classifierResult = classify0(vectorUnderTest, trainingMat, hwLabels, 3)
-        print("the classifier came back with: %d, the real answer is: %d" % (classifierResult, classNumStr))
-        errorCount += classifierResult != classNumStr
+
+        if classifierResult != classNumStr :
+            print("the classifier came back with: %d, the real answer is: %d" % (classifierResult, classNumStr))
+            errorCount = errorCount + 1
+            errorName.append(fileStr)
+        #errorCount += classifierResult != classNumStr
+
+
     print("\nthe total number of errors is: %d" % errorCount)
     print("\nthe total error rate is: %f" % (errorCount / mTest))
+    print("\n errorName is : \n")
+    print("hah ", errorName)
 
 
 if __name__ == '__main__':
-    # test1()
+    test1()
     # datingClassTest()
-    handwritingClassTest()
+    #handwritingClassTest()
